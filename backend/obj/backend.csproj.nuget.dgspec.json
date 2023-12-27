@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\controle-producao\\backend\\backend.csproj": {}
+    "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\backend\\backend.csproj": {}
   },
   "projects": {
-    "E:\\controle-producao\\backend\\backend.csproj": {
+    "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\controle-producao\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "E:\\controle-producao\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
-        "outputPath": "E:\\controle-producao\\backend\\obj\\",
+        "projectPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,12 +37,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.4.0, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
