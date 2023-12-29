@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using ProductsAPI.Models.Production;
 
 namespace ProductsAPI.Data;
 
 public class AppDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
+    public DbSet<Production> Productions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
-        => optionsBuilder.UseSqlite("DataSource=products.db;Cache=Shared");
+        => optionsBuilder.UseSqlite("DataSource=production-control.db;Cache=Shared");
 }

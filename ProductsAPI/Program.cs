@@ -1,15 +1,20 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductsAPI.Data;
+using ProductsAPI.Models.Production;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>();
 
 var app = builder.Build();
 
+#region Products
+
 app.MapGet("/products", (AppDbContext context) =>
-    {
-        return Results.Ok(context.Products.ToList());
-    });
+{
+    return Results.Ok(context.Products.ToList());
+});
 
 app.MapPost("/products/", (AppDbContext context, [FromBody] Product product) =>
 {
@@ -75,4 +80,71 @@ app.MapPost("/products/{productCode}/remove", (AppDbContext context, int product
     }
 });
 
+#endregion
+
+#region Production
+
+app.MapGet("/productions", (AppDbContext context) => {
+    return Results.Ok(context.Productions.ToList());
+});
+
+app.MapPost("/productions", (AppDbContext context, [FromBody] Production production) => 
+{
+    try
+    {
+        if(context.Products.FirstOrDefault(product => product.Code == production.ProductCode) == null)
+        {
+            return Results.NotFound("Verify product Code");
+        }
+
+        if (production.Amount >= 1)
+        {
+            var newProduction = new Production(Guid.NewGuid(), production.ProductCode, production.Amount, DateTime.Now, production.Validity);
+            context.Productions.Add(newProduction);
+            context.SaveChanges();
+            return Results.Created($"/production/{production.ProductionId}", production);
+        }
+
+        throw new Exception("Failed to create production, verify production informations");
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
+
+app.MapGet("/productions/{productCode}", (AppDbContext context, int productCode) => 
+{
+
+    try 
+    {
+        Production? production = context.Productions.FirstOrDefault(production => production.ProductCode == productCode);
+        if(production == null) throw new KeyNotFoundException("Cant Find any production for this code");
+
+        return Results.Ok(production);
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+
+});
+
+app.MapGet("/productions/list/{date}", (AppDbContext context, string date) => 
+{
+    try
+    {
+        string dateFormat = "yyyy-MM-dd";
+        DateTime searchDate = DateTime.ParseExact(date, dateFormat, CultureInfo.InvariantCulture);
+        List<Production> productions = (List<Production>)context.Productions.Select(productions => productions.FabricationDate == searchDate);
+
+        return Results.Ok(productions);
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
+
+#endregion
 app.Run();
