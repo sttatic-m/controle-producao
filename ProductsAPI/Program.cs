@@ -27,7 +27,7 @@ app.MapPost("/products/", (AppDbContext context, [FromBody] Product product) =>
 
 app.MapGet("/products/{productName}", (AppDbContext context, string productName) => 
 {
-    return Results.Ok(context.Products.First( product => product.ProductName == productName));
+    return Results.Ok(context.Products.FirstOrDefault( product => product.ProductName == productName));
 });
 
 app.Run();
