@@ -39,7 +39,7 @@ app.MapGet("/products/{productCode}", (AppDbContext context, int productCode) =>
     return Results.Ok(context.Products.FirstOrDefault(product => product.Code == productCode));
 });
 
-app.MapPost("/products/edit/{productCode}", (AppDbContext context, int productCode, [FromBody] Product updateProduct) =>
+app.MapPost("/products/{productCode}/edit", (AppDbContext context, int productCode, [FromBody] Product updateProduct) =>
 {
     try
     {
@@ -99,7 +99,7 @@ app.MapPost("/productions", (AppDbContext context, [FromBody] Production product
 
         if (production.Amount >= 1)
         {
-            var newProduction = new Production(Guid.NewGuid(), production.ProductCode, production.Amount, DateTime.Now, production.Validity);
+            var newProduction = new Production(Guid.NewGuid(), production.Code, production.ProductCode, production.Amount, DateTime.Now, production.Validity);
             context.Productions.Add(newProduction);
             context.SaveChanges();
             return Results.Created($"/production/{production.ProductionId}", production);
@@ -113,14 +113,38 @@ app.MapPost("/productions", (AppDbContext context, [FromBody] Production product
     }
 });
 
-app.MapGet("/productions/{productCode}", (AppDbContext context, int productCode) => 
+app.MapPost("/productions/{productionCode}/edit", (AppDbContext context, int productionCode, [FromBody] Production updateProduction) => 
+{
+    try
+    {
+        Production? production = context.Productions.FirstOrDefault(production => production.Code == productionCode);
+
+        if (production != null)
+        {
+            production.ProductCode = updateProduction.ProductCode;
+            production.Amount = updateProduction.Amount;
+            production.Validity = updateProduction.Validity;
+
+            context.Update(production);
+            context.SaveChanges();
+
+            return Results.Ok(production);
+        }
+
+        return Results.NotFound(production);
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
+
+app.MapGet("/productions/{productionCode}", (AppDbContext context, int productionCode) => 
 {
 
     try 
     {
-        Production? production = context.Productions.FirstOrDefault(production => production.ProductCode == productCode);
-        if(production == null) throw new KeyNotFoundException("Cant Find any production for this code");
-
+        Production? production = context.Productions.FirstOrDefault(production => production.ProductCode == productionCode) ?? throw new KeyNotFoundException("Cant Find any production for this code");
         return Results.Ok(production);
     }
     catch (Exception e)
@@ -130,15 +154,37 @@ app.MapGet("/productions/{productCode}", (AppDbContext context, int productCode)
 
 });
 
-app.MapGet("/productions/list/{date}", (AppDbContext context, string date) => 
+app.MapGet("/productions/{search}/list", (AppDbContext context, string search) => 
 {
     try
     {
-        string dateFormat = "yyyy-MM-dd";
-        DateTime searchDate = DateTime.ParseExact(date, dateFormat, CultureInfo.InvariantCulture);
-        List<Production> productions = (List<Production>)context.Productions.Select(productions => productions.FabricationDate == searchDate);
+        List<Production> productions;
 
+        string dateFormat = "yyyy-MM-dd";
+        DateTime searchDate;
+        if(DateTime.TryParseExact(search, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate))
+        {
+            productions = context.Productions.Where(productions => productions.FabricationDate.Date == searchDate).ToList();
+            return Results.Ok(productions);
+        }
+
+        productions = context.Productions.Where(productions => productions.ProductCode == int.Parse(search)).ToList();
         return Results.Ok(productions);
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
+
+app.MapPost("/productions/{productionCode}/remove", (AppDbContext context, int productionCode) =>
+{
+    try
+    {
+        Production? production = context.Productions.FirstOrDefault(production => production.Code == productionCode);
+        if (production != null) context.Remove(production);
+        context.SaveChanges();
+        return Results.Ok(production);
     }
     catch (Exception e)
     {
