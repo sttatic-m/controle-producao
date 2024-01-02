@@ -1,6 +1,6 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ProductsAPI.Data;
 using ProductsAPI.Models.Production;
 
@@ -11,12 +11,14 @@ var app = builder.Build();
 
 #region Products
 
-app.MapGet("/products", (AppDbContext context) =>
+app.MapGet("/products", (AppDbContext context) => 
 {
-    return Results.Ok(context.Products.ToList());
+    var products = context.Products;
+
+    return Results.Content(JsonConvert.SerializeObject(products), "application/json");
 });
 
-app.MapPost("/products/", (AppDbContext context, [FromBody] Product product) =>
+app.MapPost("/products", (AppDbContext context, [FromBody] Product product) =>
 {
     try
     {
@@ -36,7 +38,7 @@ app.MapPost("/products/", (AppDbContext context, [FromBody] Product product) =>
 
 app.MapGet("/products/{productCode}", (AppDbContext context, int productCode) =>
 {
-    return Results.Ok(context.Products.FirstOrDefault(product => product.Code == productCode));
+    return Results.Json(context.Products.FirstOrDefault(product => product.Code == productCode));
 });
 
 app.MapPost("/products/{productCode}/edit", (AppDbContext context, int productCode, [FromBody] Product updateProduct) =>
@@ -184,7 +186,7 @@ app.MapPost("/productions/{productionCode}/remove", (AppDbContext context, int p
         Production? production = context.Productions.FirstOrDefault(production => production.Code == productionCode);
         if (production != null) context.Remove(production);
         context.SaveChanges();
-        return Results.Ok(production);
+        return Results.Json(production);
     }
     catch (Exception e)
     {
