@@ -6,8 +6,16 @@ using ProductsAPI.Models.Production;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAnyOrigin", builder => {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
+app.UseCors("AllowAnyOrigin");
 
 #region Products
 
