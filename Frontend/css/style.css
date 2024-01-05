@@ -23,10 +23,14 @@ div.button-div {
     margin: 0 25px;
 }
 
-div.table-div {
+div.table-div, div.production-cards{
     display: flex;
+    flex-direction:  column;
     justify-content: center;
     align-items: center;
-    text-align: center;
     margin: auto 25px;
+}
+
+div.production-cards > div {
+    margin: 25px;
 }

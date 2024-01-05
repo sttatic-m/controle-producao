@@ -4,8 +4,7 @@ getProducts();
 
 let editBtns = document.querySelectorAll("a#edit-btn");
 let editModal = document.querySelector("#edit-modal");
-editBtns.forEach(btn => {
-    
+editBtns.forEach (btn => {
     btn.addEventListener('shown.bs.modal', () => {
         modal.focus();
     });
@@ -16,7 +15,6 @@ async function getProducts() {
     await fetch("http://localhost:5096/products")
         .then(response => { return response.json() })
         .then(data => {
-
             data.forEach(product => {
                 table.innerHTML += `
                     <tr>

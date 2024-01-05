@@ -12,7 +12,6 @@ form.edit-form {
     flex-direction: column;
     width: 55%;
     align-items: center;
-
 }
 
 form.edit-form div {
@@ -26,4 +25,8 @@ form.edit-form label {
 
 form.edit-form input {
     color: black;
+}
+
+select.selecProducts {
+    width: 70%
 }
