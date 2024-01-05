@@ -245,3 +245,4 @@ C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\obj\Debug\net
 C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\obj\Debug\net8.0\ProductsAPI.genruntimeconfig.cache
 C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\obj\Debug\net8.0\ref\ProductsAPI.dll
 C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
+E:\controle-producao\ProductsAPI\bin\Debug\net8.0\Newtonsoft.Json.dll

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\ProductsAPI\\ProductsAPI.csproj": {}
+    "E:\\controle-producao\\ProductsAPI\\ProductsAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\ProductsAPI\\ProductsAPI.csproj": {
+    "E:\\controle-producao\\ProductsAPI\\ProductsAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\ProductsAPI\\ProductsAPI.csproj",
+        "projectUniqueName": "E:\\controle-producao\\ProductsAPI\\ProductsAPI.csproj",
         "projectName": "ProductsAPI",
-        "projectPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\ProductsAPI\\ProductsAPI.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\controle-producao\\ProductsAPI\\obj\\",
+        "projectPath": "E:\\controle-producao\\ProductsAPI\\ProductsAPI.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "E:\\controle-producao\\ProductsAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
