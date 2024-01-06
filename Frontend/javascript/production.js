@@ -1,17 +1,25 @@
+const params = new URLSearchParams(window.location.search);
 const productionCard = document.querySelector("#production-cards");
 if (productionCard != null) { getProductions(); }
 
 const productSelect = document.querySelector("#product-select");
-if (productSelect != null) findProducts();
+if (productSelect != null) {
+    findProducts();
+}
 
 const productionForm = document.querySelector("#production-form");
-if(productionForm != null) {
-    productionForm.addEventListener("submit", (e) => {
+if (productionForm != null) {
+    productionForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        addProduction();
+        if (!params.has("code")) {
+            await addProduction();
+        }
+
+        await editProduction();
     });
 }
+
 async function getProductions() {
     await fetch("http://localhost:5096/productions")
         .then(response => {
@@ -30,7 +38,13 @@ async function getProductions() {
                                 <div class="card-body">
                                     <h5 class="card-title">${data.productName}</h5>
                                     <h6 class="card-subtitle mb-2 text-body-secondary">Quantidade: ${production.amount}</h6>
-                                    <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
+                                    <div class="production-btns">
+                                        <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
+                                        <div>
+                                        <a class="btn btn-secondary" href="http://127.0.0.1:5500/Frontend/pages/newProduction.html?code=${production.code}">Edit</a>
+                                        <a class="btn btn-danger" id="delete-btn" onClick="openModal('${data.productName}', ${production.code})">Delete</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         `
@@ -43,17 +57,17 @@ async function getProductions() {
 async function addProduction() {
     const amountIpt = document.querySelector("div#amount-div").querySelector("input");
     const validityIpt = document.querySelector("div#validity-div").querySelector("input");
-    const dateIpt = document.querySelector("div#date-div").querySelector("input");
+    const recipesIpt = document.querySelector("div#recipes-div").querySelector("input");
 
     const data = {
-        "code": newCode(),
-        "productCode": productSelect.value,
+        "Code": await newCode(),
+        "ProductCode": productSelect.value,
         "amount": amountIpt.value,
-        "fabricationDate": dateIpt.value,
-        "validity": validityIpt.value
+        "validity": validityIpt.value,
+        "recipesQuantity": recipesIpt.value
     }
 
-    const opt = { 
+    const opt = {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -62,12 +76,12 @@ async function addProduction() {
     }
 
     await fetch("http://localhost:5096/productions", opt)
-    .finally( () => {
-        //indow.location.href = "http://localhost:5500/Frontend/pages/productions.html";
-    })    
-    .catch(err => {
-        console.error(err);
-    });
+        .finally(() => {
+            window.location.href = "http://localhost:5500/Frontend/pages/productions.html"
+        })
+        .catch(err => {
+            console.error(err);
+        });
 }
 
 async function findProducts() {
@@ -81,6 +95,23 @@ async function findProducts() {
                     <option value=${product.Code}>${product.ProductName}</option>
                 `;
             });
+
+            let code = "";
+            if (params.has("code")) {
+                code = params.get("code");
+                const amountIpt = document.querySelector("div#amount-div").querySelector("input");
+                const validityIpt = document.querySelector("div#validity-div").querySelector("input");
+                const recipesIpt = document.querySelector("div#recipes-div").querySelector("input");
+
+                fetch(`http://localhost:5096/productions/${code}`)
+                    .then(response => { return response.json() })
+                    .then(data => {
+                        productSelect.value = data.productCode;
+                        amountIpt.value = data.amount;
+                        validityIpt.value = data.validity;
+                        recipesIpt.value = data.recipesQuantity;
+                    });
+            }
         });
 }
 
@@ -100,3 +131,60 @@ async function newCode() {
 
     return code;
 }
+
+async function editProduction() {
+    const amountIpt = document.querySelector("div#amount-div").querySelector("input");
+    const validityIpt = document.querySelector("div#validity-div").querySelector("input");
+    const recipesIpt = document.querySelector("div#recipes-div").querySelector("input");
+
+    const code = params.get("code");
+    const data = {
+        "ProductCode": productSelect.value,
+        "amount": amountIpt.value,
+        "validity": validityIpt.value,
+        "recipesQuantity": recipesIpt.value
+    }
+
+    const opt = {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+
+    await fetch(`http://localhost:5096/productions/${code}/edit`, opt)
+        .finally(() => {
+            window.location.href = "http://localhost:5500/Frontend/pages/productions.html";
+        })
+        .catch(err => {
+            console.error(err);
+        });
+}
+
+function openModal(name, prodCode) {
+    const deleteModal = document.querySelector("#delete-modal");
+    const productName = deleteModal.querySelector("#product-name");
+    const confirmBtn = deleteModal.querySelector("#confirm-btn");
+    const cancelBtn = deleteModal.querySelector("#cancel-btn");
+
+    let code = prodCode;
+    productName.textContent = name;
+    deleteModal.style.display = "flex";
+
+    
+    confirmBtn.addEventListener("click", async () => {
+        const opt = { 
+            method: "POST"
+        }
+        await fetch(`http://localhost:5096/productions/${code}/remove`, opt)
+            .catch(err => {
+                console.error(err);
+            });
+    });
+
+    cancelBtn.addEventListener("click", () => {
+        deleteModal.style.display = "none";
+    });
+}
+

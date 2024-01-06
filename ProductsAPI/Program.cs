@@ -109,7 +109,7 @@ app.MapPost("/productions", (AppDbContext context, [FromBody] Production product
 
         if (production.Amount >= 1)
         {
-            var newProduction = new Production(Guid.NewGuid(), production.Code, production.ProductCode, production.Amount, DateTime.Now, production.Validity);
+            var newProduction = new Production(Guid.NewGuid(), production.Code, production.ProductCode, production.Amount, DateTime.Now, production.Validity, production.RecipesQuantity);
             context.Productions.Add(newProduction);
             context.SaveChanges();
             return Results.Created($"/production/{production.ProductionId}", production);
@@ -134,7 +134,8 @@ app.MapPost("/productions/{productionCode}/edit", (AppDbContext context, int pro
             production.ProductCode = updateProduction.ProductCode;
             production.Amount = updateProduction.Amount;
             production.Validity = updateProduction.Validity;
-
+            production.RecipesQuantity = updateProduction.RecipesQuantity;
+            
             context.Update(production);
             context.SaveChanges();
 
@@ -154,7 +155,7 @@ app.MapGet("/productions/{productionCode}", (AppDbContext context, int productio
 
     try 
     {
-        Production? production = context.Productions.FirstOrDefault(production => production.ProductCode == productionCode) ?? throw new KeyNotFoundException("Cant Find any production for this code");
+        Production? production = context.Productions.FirstOrDefault(production => production.Code == productionCode) ?? throw new KeyNotFoundException("Cant Find any production for this code");
         return Results.Ok(production);
     }
     catch (Exception e)

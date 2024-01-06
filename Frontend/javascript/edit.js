@@ -34,6 +34,7 @@ form.addEventListener("submit", async (e) => {
     })
     .catch(err => { window.alert(err)})
 });
+
 async function getProduct() {
 
     await fetch(`http://localhost:5096/products/${code}`)
