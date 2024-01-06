@@ -23,7 +23,7 @@ app.MapGet("/products", (AppDbContext context) =>
 {
     var products = context.Products;
 
-    return Results.Content(JsonConvert.SerializeObject(products), "application/json");
+    return Results.Ok(products);
 });
 
 app.MapPost("/products", (AppDbContext context, [FromBody] Product product) =>
