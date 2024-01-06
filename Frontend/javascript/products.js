@@ -12,7 +12,10 @@ editBtns.forEach(btn => {
 
 async function getProducts() {
 
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products")
+const opt = {
+    cors: "no-cors"
+}
+    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products", opt)
         .then(response => { return response.json() })
         .then(data => {
             data.forEach(product => {
