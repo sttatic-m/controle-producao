@@ -12,7 +12,7 @@ editBtns.forEach(btn => {
 
 async function getProducts() {
 
-    await fetch("http://localhost:5096/products")
+    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products")
         .then(response => { return response.json() })
         .then(data => {
             data.forEach(product => {
@@ -48,7 +48,7 @@ function openModal(name, prodCode) {
         const opt = {
             method: "POST"
         }
-        await fetch(`http://localhost:5096/products/${code}/remove`, opt)
+        await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${code}/remove`, opt)
             .catch(err => {
                 console.error(err);
             });

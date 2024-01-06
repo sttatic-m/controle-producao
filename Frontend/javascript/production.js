@@ -21,7 +21,7 @@ if (productionForm != null) {
 }
 
 async function getProductions() {
-    await fetch("http://localhost:5096/productions")
+    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions")
         .then(response => {
             if (!response.ok) throw new Error("Failed to get productions");
 
@@ -30,7 +30,7 @@ async function getProductions() {
         .then(data => {
             data.forEach(production => {
 
-                fetch(`http://localhost:5096/products/${production.productCode}`)
+                fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${production.productCode}`)
                     .then(response => { return response.json() })
                     .then(data => {
                         productionCard.innerHTML += `
@@ -75,7 +75,7 @@ async function addProduction() {
         body: JSON.stringify(data)
     }
 
-    await fetch("http://localhost:5096/productions", opt)
+    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions", opt)
         .finally(() => {
             window.location.href = "http://localhost:5500/Frontend/pages/productions.html"
         })
@@ -85,7 +85,7 @@ async function addProduction() {
 }
 
 async function findProducts() {
-    await fetch("http://localhost:5096/products")
+    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products")
         .then(response => {
             return response.json();
         })
@@ -103,7 +103,7 @@ async function findProducts() {
                 const validityIpt = document.querySelector("div#validity-div").querySelector("input");
                 const recipesIpt = document.querySelector("div#recipes-div").querySelector("input");
 
-                fetch(`http://localhost:5096/productions/${code}`)
+                fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions/${code}`)
                     .then(response => { return response.json() })
                     .then(data => {
                         productSelect.value = data.productCode;
@@ -118,7 +118,7 @@ async function findProducts() {
 async function newCode() {
     let code = 0;
 
-    await fetch("http://localhost:5096/productions")
+    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions")
         .then(response => {
             if (!response.ok) throw new Error("Failed get products")
             return response.json();
@@ -153,7 +153,7 @@ async function editProduction() {
         body: JSON.stringify(data)
     }
 
-    await fetch(`http://localhost:5096/productions/${code}/edit`, opt)
+    await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions/${code}/edit`, opt)
         .finally(() => {
             window.location.href = "http://localhost:5500/Frontend/pages/productions.html";
         })
@@ -177,7 +177,7 @@ function openModal(name, prodCode) {
         const opt = { 
             method: "POST"
         }
-        await fetch(`http://localhost:5096/productions/${code}/remove`, opt)
+        await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions/${code}/remove`, opt)
             .catch(err => {
                 console.error(err);
             });

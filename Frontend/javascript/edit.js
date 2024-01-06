@@ -26,7 +26,7 @@ form.addEventListener("submit", async (e) => {
         body: JSON.stringify(data)
     }
 
-    await fetch(`http://localhost:5096/products/${code}/edit`, options)
+    await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${code}/edit`, options)
     .then(response => {
         if(!response.ok) throw new Error("Request Failed - " + response.statusText);
 
@@ -37,7 +37,7 @@ form.addEventListener("submit", async (e) => {
 
 async function getProduct() {
 
-    await fetch(`http://localhost:5096/products/${code}`)
+    await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${code}`)
         .then(response => { return response.json() })
         .then(data => {
             codeIpt.value = data.code;
