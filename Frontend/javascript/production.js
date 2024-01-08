@@ -49,7 +49,7 @@ async function getProductions() {
                                     <div class="production-btns">
                                         <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
                                         <div>
-                                        <a class="btn btn-secondary" href="http://127.0.0.1:5500/Frontend/pages/newProduction.html?code=${production.code}">Edit</a>
+                                        <a class="btn btn-secondary" href="./newProduction.html?code=${production.code}">Edit</a>
                                         <a class="btn btn-danger" id="delete-btn" onClick="openModal('${data.productName}', ${production.code})">Delete</a>
                                         </div>
                                     </div>
