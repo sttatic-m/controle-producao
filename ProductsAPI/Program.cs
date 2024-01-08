@@ -23,7 +23,7 @@ app.MapGet("/products", (AppDbContext context) =>
 {
     var products = context.Products;
 
-    return Results.Ok(products);
+    return Results.Json(products);
 });
 
 app.MapPost("/products", (AppDbContext context, [FromBody] Product product) =>
