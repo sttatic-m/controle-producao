@@ -1,3 +1,4 @@
+const ngrokLink = "https://3a42-2804-d45-8c0c-d200-6d9c-a15a-874c-b446.ngrok-free.app";
 
 let params = new URLSearchParams(window.location.search);
 let code = params.get('code');
@@ -12,7 +13,12 @@ let selectProduct = document.querySelector("select#select-products");
 newCode();
 
 async function newCode() {
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products")
+    const options = {
+        headers: new Headers({
+            "ngrok-skip-browser-warning": "5000"
+        }),
+    }
+    await fetch(ngrokLink + "/products", options)
         .then(response => {
             if(!response.ok) throw new Error("Failed get products")
             return response.json();
@@ -34,13 +40,14 @@ form.addEventListener("submit", async (e) => {
     }
     const opt = { 
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "5000"
+        }),
         body: JSON.stringify(data)
     }
 
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products", opt)
+    await fetch(ngrokLink + "/products", opt)
 
-    window.location.href = "http://localhost:5500/Frontend/pages/products.html";
+    window.location.href = "./products.html";
 });

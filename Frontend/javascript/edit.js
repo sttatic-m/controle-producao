@@ -1,4 +1,6 @@
 
+const ngrokLink = "https://3a42-2804-d45-8c0c-d200-6d9c-a15a-874c-b446.ngrok-free.app";
+
 let params =  new URLSearchParams(window.location.search);
 let code = params.get('code');
 let form = document.querySelector("#edit-form");
@@ -20,24 +22,30 @@ form.addEventListener("submit", async (e) => {
 
     const options = {
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "5000"
+        }),
         body: JSON.stringify(data)
     }
 
-    await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${code}/edit`, options)
+    await fetch(ngrokLink + `/products/${code}/edit`, options)
     .then(response => {
         if(!response.ok) throw new Error("Request Failed - " + response.statusText);
 
-        window.location.href = "http://localhost:5500/Frontend/pages/products.html"
+        window.location.href = "./pages/products.html"
     })
     .catch(err => { window.alert(err)})
 });
 
 async function getProduct() {
+    const options = {
+        headers: new Headers({
+            "ngrok-skip-browser-warning": "5000"
+        }),
+    }
 
-    await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${code}`)
+    await fetch(ngrokLink + `/products/${code}`, options)
         .then(response => { return response.json() })
         .then(data => {
             codeIpt.value = data.code;

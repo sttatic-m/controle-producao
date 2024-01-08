@@ -1,4 +1,6 @@
 const params = new URLSearchParams(window.location.search);
+const ngrokLink = "https://3a42-2804-d45-8c0c-d200-6d9c-a15a-874c-b446.ngrok-free.app";
+
 const productionCard = document.querySelector("#production-cards");
 if (productionCard != null) { getProductions(); }
 
@@ -21,7 +23,13 @@ if (productionForm != null) {
 }
 
 async function getProductions() {
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions")
+    const opt = {
+        cors: "no-cors",
+        headers: new Headers({
+            "ngrok-skip-browser-warning": "5000"
+        })
+    }
+    await fetch(ngrokLink + "/productions", opt)
         .then(response => {
             if (!response.ok) throw new Error("Failed to get productions");
 
@@ -30,7 +38,7 @@ async function getProductions() {
         .then(data => {
             data.forEach(production => {
 
-                fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${production.productCode}`)
+                fetch(ngrokLink + `/products/${production.productCode}`, opt)
                     .then(response => { return response.json() })
                     .then(data => {
                         productionCard.innerHTML += `
@@ -70,14 +78,15 @@ async function addProduction() {
     const opt = {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "5000"
         },
         body: JSON.stringify(data)
     }
 
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions", opt)
+    await fetch(ngrokLink + "/productions", opt)
         .finally(() => {
-            window.location.href = "http://localhost:5500/Frontend/pages/productions.html"
+            window.location.href = "./productions.html"
         })
         .catch(err => {
             console.error(err);
@@ -85,7 +94,12 @@ async function addProduction() {
 }
 
 async function findProducts() {
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products")
+    const opt = {
+        headers: new Headers({
+            "ngrok-skip-browser-warning": "5000"
+        })
+    }
+    await fetch(ngrokLink + "/products", opt)
         .then(response => {
             return response.json();
         })
@@ -103,7 +117,7 @@ async function findProducts() {
                 const validityIpt = document.querySelector("div#validity-div").querySelector("input");
                 const recipesIpt = document.querySelector("div#recipes-div").querySelector("input");
 
-                fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions/${code}`)
+                fetch(ngrokLink + `/productions/${code}`, opt)
                     .then(response => { return response.json() })
                     .then(data => {
                         productSelect.value = data.productCode;
@@ -117,8 +131,13 @@ async function findProducts() {
 
 async function newCode() {
     let code = 0;
+    const opt = {
+        headers: new Headers({
+            "ngrok-skip-browser-warning": "5000"
+        })
+    }
 
-    await fetch("https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions")
+    await fetch(ngrokLink + "/productions", opt)
         .then(response => {
             if (!response.ok) throw new Error("Failed get products")
             return response.json();
@@ -147,15 +166,16 @@ async function editProduction() {
 
     const opt = {
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            "ngrok-skip-browser-warning": "5000"
+        }),
         body: JSON.stringify(data)
     }
 
-    await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions/${code}/edit`, opt)
+    await fetch(ngrokLink + `/productions/${code}/edit`, opt)
         .finally(() => {
-            window.location.href = "http://localhost:5500/Frontend/pages/productions.html";
+            window.location.href = "./productions.html";
         })
         .catch(err => {
             console.error(err);
@@ -171,13 +191,15 @@ function openModal(name, prodCode) {
     let code = prodCode;
     productName.textContent = name;
     deleteModal.style.display = "flex";
-
     
     confirmBtn.addEventListener("click", async () => {
         const opt = { 
-            method: "POST"
+            method: "POST",
+            headers: new Headers({
+                "ngrok-skip-browser-warning": "5000"
+            })
         }
-        await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/productions/${code}/remove`, opt)
+        await fetch(ngrokLink + `/productions/${code}/remove`, opt)
             .catch(err => {
                 console.error(err);
             });

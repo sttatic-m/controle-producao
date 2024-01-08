@@ -1,3 +1,4 @@
+const ngrokLink = "https://3a42-2804-d45-8c0c-d200-6d9c-a15a-874c-b446.ngrok-free.app";
 
 let table = document.querySelector("tbody#table-body");
 getProducts();
@@ -12,9 +13,13 @@ editBtns.forEach(btn => {
 
 async function getProducts() {
     const opt = {
-        "cors": "no-cors"
+        method: "GET", 
+        cors: "no-cors",
+        headers: new Headers({
+            "ngrok-skip-browser-warning": "5000"
+        })
     }
-    await fetch("https://3a42-2804-d45-8c0c-d200-6d9c-a15a-874c-b446.ngrok-free.app/products", opt)
+    await fetch(ngrokLink + "/products", opt)
         .then(response => { return response.json() })
         .then(data => {
             data.forEach(product => {
@@ -48,9 +53,13 @@ function openModal(name, prodCode) {
 
     confirmBtn.addEventListener("click", async () => {
         const opt = {
-            method: "POST"
+            method: "POST",
+            cors: "no-cors",
+            headers: new Headers({
+                "ngrok-skip-browser-warning": "5000"
+            })
         }
-        await fetch(`https://c542-2804-d45-8c0c-d200-14f7-8bbc-f91e-4e49.ngrok-free.app/products/${code}/remove`, opt)
+        await fetch(ngrokLink + `/products/${code}/remove`, opt)
             .catch(err => {
                 console.error(err);
             });
