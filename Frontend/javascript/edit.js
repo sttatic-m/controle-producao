@@ -33,7 +33,7 @@ form.addEventListener("submit", async (e) => {
     .then(response => {
         if(!response.ok) throw new Error("Request Failed - " + response.statusText);
 
-        window.location.href = "./pages/products.html"
+        window.location.href = "./products.html"
     })
     .catch(err => { window.alert(err)})
 });

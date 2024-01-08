@@ -63,6 +63,7 @@ function openModal(name, prodCode) {
             .catch(err => {
                 console.error(err);
             });
+        deleteModal.style.display = "none";
     });
 
     cancelBtn.addEventListener("click", () => {
