@@ -1,4 +1,4 @@
-const ngrokLink = "https://b330-2804-d45-8c0c-d200-8cca-c017-96ed-2372.ngrok-free.app";
+const ngrokLink = "https://849b-2804-d45-8c0c-d200-8cca-c017-96ed-2372.ngrok-free.app";
 
 let params = new URLSearchParams(window.location.search);
 let code = params.get('code');
