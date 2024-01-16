@@ -5,6 +5,19 @@ const productionCard = document.querySelector("#production-cards");
 
 if (productionCard != null) { getProductions(); }
 
+const dateIpt = document.querySelector("input#date-ipt");
+const dateBtn = document.querySelector("a#search-btn");
+
+if (dateIpt != null) {
+    document.addEventListener("DOMContentLoaded", () => {
+        let date = new Date();
+        dateIpt.value = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}`;
+        getProductionByDate(dateIpt.value);
+    });
+    dateIpt.addEventListener("input", () => {
+        getProductionByDate(dateIpt.value);
+    });
+}
 const productSelect = document.querySelector("datalist#product-datalist");
 const productDataName = document.querySelector("#data-product-name");
 const productDataIpt = document.querySelector("#product-data-ipt");
@@ -26,15 +39,6 @@ function updateProducSearch()
     });
 }
 
-const dateIpt = document.querySelector("input#date-ipt");
-const dateBtn = document.querySelector("a#search-btn");
-
-if (dateIpt != null) {
-    dateIpt.addEventListener("input", () => {
-        getProductionByDate(dateIpt.value);
-    });
-}
-
 const productionForm = document.querySelector("#production-form");
 if (productionForm != null) {
     productionForm.addEventListener("submit", async (e) => {
@@ -43,7 +47,7 @@ if (productionForm != null) {
         if (!params.has("code")) {
             await addProduction();
         }
-
+        
         await editProduction();
     });
 }
@@ -144,7 +148,7 @@ async function addProduction() {
         "ProductCode": productDataIpt.value,
         "amount": amountIpt.value,
         "validity": validityIpt.value,
-        "recipesQuantity": recipesIpt.value
+        "recipesQuantity": recipesIpt.value,
     }
 
     const opt = {
@@ -235,7 +239,7 @@ async function editProduction() {
         "ProductCode": productDataIpt.value,
         "amount": amountIpt.value,
         "validity": validityIpt.value,
-        "recipesQuantity": recipesIpt.value
+        "recipesQuantity": recipesIpt.value,
     }
 
     const opt = {
