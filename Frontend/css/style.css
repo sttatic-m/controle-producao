@@ -54,3 +54,20 @@ div.delete-modal {
     justify-content: center;
     align-items: center;
 }
+
+div.search-div {
+    display: flex;
+    justify-content: right;
+    margin: 10px 1.3rem;
+    justify-content: space-between;
+}
+
+div.search-div div {
+    margin: 0 15px;
+}
+
+div.production {
+    width: fit-content;
+    margin: auto 0;
+    width: 100%;
+}

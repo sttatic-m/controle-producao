@@ -128,14 +128,14 @@ app.MapPost("/productions/{productionCode}/edit", (AppDbContext context, int pro
     try
     {
         Production? production = context.Productions.FirstOrDefault(production => production.Code == productionCode);
-
+        
         if (production != null)
         {
             production.ProductCode = updateProduction.ProductCode;
             production.Amount = updateProduction.Amount;
             production.Validity = updateProduction.Validity;
             production.RecipesQuantity = updateProduction.RecipesQuantity;
-            
+
             context.Update(production);
             context.SaveChanges();
 

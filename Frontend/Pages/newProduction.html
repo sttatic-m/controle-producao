@@ -21,8 +21,12 @@
 
     <div class="edit-form">
         <form class="edit-form" id="production-form">
-            <select class="form-select form-select-lg mb-3" id="product-select">
-            </select>
+            <div class="input-group" style="display: flex;">
+                <input id="product-data-ipt"list="product-datalist" class="form-control mb-3 dropdown-toggle" style="width: 25%" required>
+                <datalist id="product-datalist">
+                </datalist>
+                <input type="text" class="form-control mb-3" style="width: 75%;" id="data-product-name" readonly/>
+            </div>    
             <div class="input-group mb-3" id="amount-div">
                 <label for="amount" class="input-group-text" id="inputGroup-sizing-sm">Quantidade</label>
                 <input type="number" class="form-control" id="inputGroup-sizing-large" name="amount" required/>
