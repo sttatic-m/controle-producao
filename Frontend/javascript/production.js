@@ -1,5 +1,5 @@
 const params = new URLSearchParams(window.location.search);
-const ngrokLink = "https://849b-2804-d45-8c0c-d200-8cca-c017-96ed-2372.ngrok-free.app";
+const ngrokLink = "https://512c-2804-d45-8c0c-d200-3d5e-bb99-85b7-5b4a.ngrok-free.app";
 
 const productionCard = document.querySelector("#production-cards");
 
