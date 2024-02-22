@@ -246,3 +246,8 @@ C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\obj\Debug\net
 C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\obj\Debug\net8.0\ref\ProductsAPI.dll
 C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
 E:\controle-producao\ProductsAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Usuario\OneDrive\Documentos\controle-producao\ProductsAPI\obj\Debug\net8.0\ProductsAPI.MvcApplicationPartsAssemblyInfo.cs
