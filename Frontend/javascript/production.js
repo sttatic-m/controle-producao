@@ -9,13 +9,11 @@ const dateIpt = document.querySelector("input#date-ipt");
 const dateBtn = document.querySelector("a#search-btn");
 
 if (dateIpt != null) {
-    document.addEventListener("DOMContentLoaded", () => {
-        let date = new Date();
-        dateIpt.value = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}`;
-        getProductionByDate(dateIpt.value);
-    });
-    dateIpt.addEventListener("input", () => {
-        getProductionByDate(dateIpt.value);
+    let date = new Date();
+    dateIpt.value = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}`;
+
+    dateBtn.addEventListener("click", async () => {
+        await getProductionByDate(dateIpt.value);
     });
 }
 const productSelect = document.querySelector("datalist#product-datalist");
@@ -27,13 +25,11 @@ if (productSelect != null && productDataName != null && productDataIpt != null) 
     productDataIpt.addEventListener("change", () => { updateProducSearch() });
 }
 
-function updateProducSearch()
-{
+function updateProducSearch() {
     let val = productDataIpt.value;
     let opts = productSelect.querySelectorAll("option");
     opts.forEach(opt => {
-        if(val == opt.value)
-        {
+        if (val == opt.value) {
             productDataName.placeholder = opt.textContent;
         }
     });
@@ -43,11 +39,9 @@ const productionForm = document.querySelector("#production-form");
 if (productionForm != null) {
     productionForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         if (!params.has("code")) {
             await addProduction();
         }
-        
         await editProduction();
     });
 }
@@ -59,38 +53,42 @@ async function getProductions() {
             "ngrok-skip-browser-warning": "5000"
         })
     }
-    await fetch(ngrokLink + "/productions", opt)
+    await fetch(ngrokLink + "/production", opt)
         .then(response => {
             if (!response.ok) throw new Error("Failed to get productions");
 
             return response.json();
         })
         .then(data => {
-            data.forEach(production => {
-
-                fetch(ngrokLink + `/products/${production.productCode}`, opt)
-                    .then(response => { return response.json() })
-                    .then(data => {
-                        productionCard.innerHTML += `
-                            <div class="production">
-                                <div class="card" style="width: 100%;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${data.productName}</h5>
-                                        <h6 class="card-subtitle mb-2 text-body-secondary">Quantidade: ${production.amount}</h6>
-                                        <div class="production-btns">
-                                            <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
-                                            <div>
-                                            <a class="btn btn-secondary" href="./newProduction.html?code=${production.code}">Edit</a>
-                                            <a class="btn btn-danger" id="delete-btn" onClick="openModal('${data.productName}', ${production.code})">Delete</a>
+            if (data != null) {
+                data.forEach(production => {
+                    fetch(ngrokLink + `/products/${production.productCode}`, opt)
+                        .then(response => { return response.json() })
+                        .then(data => {
+                            productionCard.innerHTML += `
+                                <div class="production">
+                                    <div class="card" style="width: 100%;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${data.productName}</h5>
+                                            <h6 class="card-subtitle mb-2 text-body-secondary">Quantidade: ${production.amount}</h6>
+                                            <div class="production-btns">
+                                                <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
+                                                <div>
+                                                <a class="btn btn-secondary" href="./newProduction.html?code=${production.code}">Edit</a>
+                                                <a class="btn btn-danger" id="delete-btn" onClick="openModal('${data.productName}', ${production.code})">Delete</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `
-                    })
-
-            });
+                            `
+                        }
+                        )
+                });
+            }
+        })
+        .catch(() => {
+            productionCard.innerHTML += `<h1>Nenhum Produção Encontrada</h1>`
         });
 }
 
@@ -103,38 +101,45 @@ async function getProductionByDate(date) {
     }
 
     productionCard.innerHTML = "";
-    await fetch(ngrokLink + `/productions/${date}/list`, opt)
+    await fetch(ngrokLink + `/production/${date}`, opt)
         .then(response => {
             if (!response.ok) throw new Error("Failed to get productions");
 
             return response.json();
         })
         .then(data => {
-            data.forEach(production => {
-
-                fetch(ngrokLink + `/products/${production.productCode}`, opt)
-                    .then(response => { return response.json() })
-                    .then(data => {
-                        productionCard.innerHTML += `
-                            <div class="production">
-                                <div class="card" style="width: 100%;">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${data.productName}</h5>
-                                        <h6 class="card-subtitle mb-2 text-body-secondary">Quantidade: ${production.amount}</h6>
-                                        <div class="production-btns">
-                                            <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
-                                            <div>
-                                            <a class="btn btn-secondary" href="./newProduction.html?code=${production.code}">Edit</a>
-                                            <a class="btn btn-danger" id="delete-btn" onClick="openModal('${data.productName}', ${production.code})">Delete</a>
+            if (data != null) {
+                data.forEach(production => {
+                    fetch(ngrokLink + `/products/${production.productCode}`, opt)
+                        .then(response => { return response.json() })
+                        .then(data => {
+                            productionCard.innerHTML += `
+                                <div class="production">
+                                    <div class="card" style="width: 100%;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${data.productName}</h5>
+                                            <h6 class="card-subtitle mb-2 text-body-secondary">Quantidade: ${production.amount}</h6>
+                                            <div class="production-btns">
+                                                <h7 class="card-subtitle mb-3 text-body-secondary">Dia Produzido: ${production.fabricationDate.split("T")[0]}</h7>
+                                                <div>
+                                                <a class="btn btn-secondary" href="./newProduction.html?code=${production.code}">Edit</a>
+                                                <a class="btn btn-danger" id="delete-btn" onClick="openModal('${data.productName}', ${production.code})">Delete</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `
-                    })
+                            `
+                        })
+                        .catch(() => {
+                            productionCard.innerHTML += `<h1>Nenhum Produção Encontrada</h1>`;
+                        })
 
-            });
+                });
+            }
+        })
+        .catch(() => {
+            productionCard.innerHTML += `<h1>Nenhum Produção Encontrada</h1>`
         });
 }
 
@@ -160,7 +165,7 @@ async function addProduction() {
         body: JSON.stringify(data)
     }
 
-    await fetch(ngrokLink + "/productions", opt)
+    await fetch(ngrokLink + "/production", opt)
         .finally(() => {
             window.location.href = "./productions.html"
         })
@@ -175,7 +180,7 @@ async function findProducts() {
             "ngrok-skip-browser-warning": "5000"
         })
     }
-    await fetch(ngrokLink + "/products", opt)
+    await fetch(ngrokLink + "/product", opt)
         .then(response => {
             return response.json();
         })
@@ -215,7 +220,7 @@ async function newCode() {
         })
     }
 
-    await fetch(ngrokLink + "/productions", opt)
+    await fetch(ngrokLink + "/production", opt)
         .then(response => {
             if (!response.ok) throw new Error("Failed get products")
             return response.json();
@@ -251,7 +256,7 @@ async function editProduction() {
         body: JSON.stringify(data)
     }
 
-    await fetch(ngrokLink + `/productions/${code}/edit`, opt)
+    await fetch(ngrokLink + `/production/${code}/edit`, opt)
         .finally(() => {
             window.location.href = "./productions.html";
         })
@@ -277,7 +282,7 @@ function openModal(name, prodCode) {
                 "ngrok-skip-browser-warning": "5000"
             })
         }
-        await fetch(ngrokLink + `/productions/${code}/remove`, opt)
+        await fetch(ngrokLink + `/production/${code}/remove`, opt)
             .catch(err => {
                 console.error(err);
             });

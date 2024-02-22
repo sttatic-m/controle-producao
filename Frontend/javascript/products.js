@@ -13,7 +13,7 @@ editBtns.forEach(btn => {
 
 async function getProducts() {
     const opt = {
-        method: "GET", 
+        method: "GET",
         cors: "no-cors",
         headers: new Headers({
             "ngrok-skip-browser-warning": "5000"
@@ -24,20 +24,20 @@ async function getProducts() {
         .then(data => {
             data.forEach(product => {
                 table.innerHTML += `
-                    <tr>
-                        <th scope="row">${product.Code}</th>
-                        <td>${product.ProductName}</td>
-                        <td>${product.Department}</td>
-                        <td>
-                            <a class="btn btn-secondary" id="edit-btn code-${product.Code}" href="./edit.html?code=${product.Code}">Edit</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-danger" id="delete-btn" onClick="openModal('${product.ProductName}', ${product.Code})">Delete</a>
-                        </td>
-                    </tr>
-                `
-            });
-        });
+                        <tr>
+                            <th scope="row">${product.code}</th>
+                            <td>${product.productName}</td>
+                            <td>${product.department}</td>
+                            <td>
+                                <a class="btn btn-secondary" id="edit-btn code-${product.code}" href="./edit.html?code=${product.code}">Edit</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" id="delete-btn" onClick="openModal('${product.productName}', ${product.code})">Delete</a>
+                            </td>
+                        </tr>
+                    `
+            })
+        })
 }
 
 function openModal(name, prodCode) {
