@@ -1,0 +1,28 @@
+/* HTML: <div class="loader"></div> */
+.load-container 
+{
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000056;
+  overflow: hidden;
+}
+
+.hide{
+  display: none;
+  pointer-events: none;
+}
+
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 8px solid lightblue;
+    border-right-color: orange;
+    animation: l2 1s infinite linear;
+  }
+  @keyframes l2 {to{transform: rotate(1turn)}}

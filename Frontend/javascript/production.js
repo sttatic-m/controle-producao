@@ -1,9 +1,9 @@
 const params = new URLSearchParams(window.location.search);
 const ngrokLink = "https://57b8-2804-d45-8c0c-d200-d97a-6b1c-2efd-188d.ngrok-free.app";
 
+const content = document.querySelector("div#body-content");
+const loader = document.querySelector("div#loader");
 const productionCard = document.querySelector("#production-cards");
-
-if (productionCard != null) { getProductions(); }
 
 const dateIpt = document.querySelector("input#date-ipt");
 const dateBtn = document.querySelector("a#search-btn");
@@ -11,11 +11,21 @@ const dateBtn = document.querySelector("a#search-btn");
 if (dateIpt != null) {
     let date = new Date();
     dateIpt.value = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getDate()}`;
+}
 
-    dateBtn.addEventListener("click", async () => {
-        await getProductionByDate(dateIpt.value);
+if (productionCard != null) { 
+    getProductions();
+    loader.classList.add("hide");
+    content.classList.remove("hide");
+ }
+
+if(dateBtn != null)
+{
+    dateBtn.addEventListener("click", () => {
+        getProductionByDate(dateIpt.value);
     });
 }
+
 const productSelect = document.querySelector("datalist#product-datalist");
 const productDataName = document.querySelector("#data-product-name");
 const productDataIpt = document.querySelector("#product-data-ipt");
@@ -180,14 +190,14 @@ async function findProducts() {
             "ngrok-skip-browser-warning": "5000"
         })
     }
-    await fetch(ngrokLink + "/product", opt)
+    await fetch(ngrokLink + "/products", opt)
         .then(response => {
             return response.json();
         })
         .then(data => {
             data.forEach(product => {
                 productSelect.innerHTML += `
-                    <option value=${product.Code}>${product.ProductName}</option>
+                    <option value=${product.code}>${product.productName}</option>
                 `;
             });
 
@@ -277,12 +287,12 @@ function openModal(name, prodCode) {
 
     confirmBtn.addEventListener("click", async () => {
         const opt = {
-            method: "POST",
+            method: "DELETE",
             headers: new Headers({
                 "ngrok-skip-browser-warning": "5000"
             })
         }
-        await fetch(ngrokLink + `/production/${code}/remove`, opt)
+        await fetch(ngrokLink + `/productions/${code}`, opt)
             .catch(err => {
                 console.error(err);
             });
