@@ -101,7 +101,7 @@ async function getProductionByDate(date) {
     }
 
     productionCard.innerHTML = "";
-    await fetch(ngrokLink + `/production/${date}`, opt)
+    await fetch(ngrokLink + `/productions/${date}`, opt)
         .then(response => {
             if (!response.ok) throw new Error("Failed to get productions");
 
