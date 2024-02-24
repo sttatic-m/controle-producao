@@ -88,8 +88,7 @@ public class ProductionController(AppDbContext appDbContext) : ControllerBase
                 List<Production> productions;
 
                 string dateFormat = "yyyy-MM-dd";
-                DateTime searchDate;
-                if (DateTime.TryParseExact(index, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate))
+                if (DateTime.TryParseExact(index, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
                 {
                     productions = _context.Productions.Where(productions => productions.FabricationDate.Date == searchDate).ToList();
                     return Ok(productions);
@@ -114,6 +113,34 @@ public class ProductionController(AppDbContext appDbContext) : ControllerBase
             if (production != null) _context.Remove(production);
             await _context.SaveChangesAsync();
             return Ok(production);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("/productions/export")]
+    public async Task<IActionResult> ExportProductions()
+    {
+        try
+        {
+            var productions = await _context.Productions.ToListAsync();
+            List<ExProduction> exProductions = [];
+
+            foreach (Production prod in productions)
+            {
+                Product product = _context.Products.FirstOrDefault(product => product.Code == prod.ProductCode) ?? throw new Exception("Cant Find Product Name");
+                string productName = product.ProductName;
+                ExProduction exProduction = new (prod.ProductionId, prod.Code, productName, prod.Amount, prod.FabricationDate, prod.Validity, prod.RecipesQuantity);
+                exProductions.Add(exProduction);
+            }
+
+            DateTime dateTime = DateTime.Now;
+            string date = $"{dateTime.Year}-{dateTime.Month.ToString("00")}-{dateTime.Day}";
+            System.IO.File.WriteAllLines($"Files/productions-{date}.csv", exProductions.Select(exProduction => (string) exProduction).ToList());
+
+            return Ok("Exportado com Sucesso");
         }
         catch (Exception e)
         {

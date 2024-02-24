@@ -11,11 +11,11 @@ public class ProductController(AppDbContext appDbContext) : ControllerBase
     private readonly AppDbContext _context = appDbContext;
 
     [HttpGet("/products")]
-    public async Task<IActionResult> GetProducts()
+    public ActionResult GetProducts()
     {
         var products = _context.Products;
 
-        return Ok(await products.ToListAsync());
+        return Ok(products);
     }
 
     [HttpPost("/products")]
